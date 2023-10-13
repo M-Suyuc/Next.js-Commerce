@@ -1,0 +1,75 @@
+import { BASE_URL, STATUS } from '@/utils'
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+interface CategotiesState {
+  categories: string[]
+  categoriesStatus: string
+
+  productsByCategory: string[]
+  productsByCategoryStatus: string
+
+  error: string | undefined
+}
+
+const initialState: CategotiesState = {
+  categories: [],
+  categoriesStatus: STATUS.IDLE,
+
+  productsByCategory: [],
+  productsByCategoryStatus: STATUS.IDLE,
+
+  error: undefined
+}
+
+const categorySlice = createSlice({
+  name: 'Category',
+  initialState,
+  reducers: {},
+  extraReducers: (builder) => {
+    builder
+      //   -----------------Fetch Products----------------------
+      .addCase(fetchAllCategories.pending, (state) => {
+        state.categoriesStatus = STATUS.LOADING
+      })
+      .addCase(fetchAllCategories.fulfilled, (state, action) => {
+        state.categoriesStatus = STATUS.SUCCEEDED
+        state.categories = action.payload
+      })
+      .addCase(fetchAllCategories.rejected, (state, action) => {
+        state.error = action.error.message
+        state.categoriesStatus = STATUS.FAILED
+      })
+      //   -----------------Fetch  Products by category----------------------
+      .addCase(fetchProductsByCategory.pending, (state) => {
+        state.productsByCategoryStatus = STATUS.LOADING
+      })
+      .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
+        state.productsByCategory = action.payload
+        state.productsByCategoryStatus = STATUS.SUCCEEDED
+      })
+      .addCase(fetchProductsByCategory.rejected, (state, action) => {
+        state.error = action.error.message
+        state.productsByCategoryStatus = STATUS.FAILED
+      })
+  }
+})
+
+export const fetchAllCategories = createAsyncThunk(
+  'categories/fetchcategories',
+  async () => {
+    const response = await fetch(`${BASE_URL}products/categories`)
+    const data = await response.json()
+    return data
+  }
+)
+
+export const fetchProductsByCategory = createAsyncThunk(
+  'category-products/fetch',
+  async ({ category }: { category: string }) => {
+    const response = await fetch(`${BASE_URL}products/category/${category}`)
+    const data = await response.json()
+    return data.products
+  }
+)
+
+export default categorySlice.reducer

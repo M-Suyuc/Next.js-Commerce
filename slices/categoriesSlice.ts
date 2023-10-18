@@ -1,11 +1,14 @@
+import { Product } from '@/types/interface.d'
 import { BASE_URL, STATUS } from '@/utils'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+
+// payload:PayloadAction<valor que devemos recibir  en el payload>
 
 interface CategotiesState {
   categories: string[]
   categoriesStatus: string
 
-  productsByCategory: string[]
+  productsByCategory: Product[]
   productsByCategoryStatus: string
 
   error: string | undefined
@@ -31,22 +34,27 @@ const categorySlice = createSlice({
       .addCase(fetchAllCategories.pending, (state) => {
         state.categoriesStatus = STATUS.LOADING
       })
-      .addCase(fetchAllCategories.fulfilled, (state, action) => {
-        state.categoriesStatus = STATUS.SUCCEEDED
-        state.categories = action.payload
-      })
+      .addCase(
+        fetchAllCategories.fulfilled,
+        (state, action: PayloadAction<string[]>) => {
+          state.categoriesStatus = STATUS.SUCCEEDED
+          state.categories = action.payload
+        }
+      )
       .addCase(fetchAllCategories.rejected, (state, action) => {
         state.error = action.error.message
         state.categoriesStatus = STATUS.FAILED
       })
-      //   -----------------Fetch  Products by category----------------------
       .addCase(fetchProductsByCategory.pending, (state) => {
         state.productsByCategoryStatus = STATUS.LOADING
       })
-      .addCase(fetchProductsByCategory.fulfilled, (state, action) => {
-        state.productsByCategory = action.payload
-        state.productsByCategoryStatus = STATUS.SUCCEEDED
-      })
+      .addCase(
+        fetchProductsByCategory.fulfilled,
+        (state, action: PayloadAction<Product[]>) => {
+          state.productsByCategory = action.payload
+          state.productsByCategoryStatus = STATUS.SUCCEEDED
+        }
+      )
       .addCase(fetchProductsByCategory.rejected, (state, action) => {
         state.error = action.error.message
         state.productsByCategoryStatus = STATUS.FAILED

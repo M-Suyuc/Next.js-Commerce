@@ -1,4 +1,4 @@
-import { TypesData, Product } from '@/types/produts'
+import { TypesData, Product } from '@/types/interface.d'
 import { BASE_URL, STATUS } from '@/utils'
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
@@ -32,10 +32,13 @@ const productsSlice = createSlice({
       .addCase(fetchAllProducts.pending, (state) => {
         state.productsStatus = STATUS.LOADING
       })
-      .addCase(fetchAllProducts.fulfilled, (state, action) => {
-        state.productsStatus = STATUS.SUCCEEDED
-        state.products = action.payload
-      })
+      .addCase(
+        fetchAllProducts.fulfilled,
+        (state, action: PayloadAction<Product[]>) => {
+          state.productsStatus = STATUS.SUCCEEDED
+          state.products = action.payload
+        }
+      )
       .addCase(fetchAllProducts.rejected, (state, action) => {
         state.productsStatus = STATUS.FAILED
         state.errorProducts = action.error.message

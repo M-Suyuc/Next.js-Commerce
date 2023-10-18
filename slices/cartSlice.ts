@@ -1,19 +1,30 @@
-import { createSlice } from '@reduxjs/toolkit'
+import { Options } from '@/types/enum.d'
+import {
+  type ProdcustWithQ,
+  type ToggleCartQtyAction
+} from '@/types/interface.d'
+import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 function ShowLocalStorage() {
   const cart = window.localStorage.getItem('cart')
   if (cart) {
-    return JSON.parse(window.localStorage.getItem('cart'))
+    return JSON.parse(cart)
   } else {
     return []
   }
 }
 
-function LocalStorage(params) {
+function LocalStorage(params: ProdcustWithQ[]) {
   window.localStorage.setItem('cart', JSON.stringify(params))
 }
 
-const initialState = {
+interface CartState {
+  productList: ProdcustWithQ[]
+  productsCount: number
+  totalAmount: number
+}
+
+const initialState: CartState = {
   productList: ShowLocalStorage(),
   productsCount: 0,
   totalAmount: 0
@@ -23,7 +34,7 @@ export const cartSlice = createSlice({
   name: 'cart',
   initialState,
   reducers: {
-    addCart: (state, action) => {
+    addCart: (state, action: PayloadAction<ProdcustWithQ>) => {
       const { id, quantity } = action.payload
 
       const findProduct = state.productList.find((item) => item.id === id)
@@ -31,7 +42,7 @@ export const cartSlice = createSlice({
       if (findProduct) {
         const tempCart = state.productList.map((product) => {
           if (product.id === id) {
-            const tempQty = product.quantity + quantity
+            const tempQty: number = (product.quantity ?? 0) + (quantity || 0)
             const tempTotalPrice = tempQty * product.price
 
             return {
@@ -51,7 +62,7 @@ export const cartSlice = createSlice({
       }
     },
 
-    DeleteProduct: (state, action) => {
+    DeleteProduct: (state, action: PayloadAction<number>) => {
       const delProduct = state.productList.filter(
         (item) => item.id !== action.payload
       )
@@ -66,19 +77,19 @@ export const cartSlice = createSlice({
       LocalStorage(state.productList)
     },
 
-    toggleCartQty: (state, action) => {
+    toggleCartQty: (state, action: PayloadAction<ToggleCartQtyAction>) => {
       const { id, option } = action.payload
       const tempCart = state.productList.map((product) => {
         if (product.id === id) {
-          let tempQty = product.quantity
+          let tempQty: number = product.quantity || 0
           let tempTotalPrice = product.totalPrice
 
-          if (option === 'INC') {
+          if (option === Options.INC) {
             tempQty++
             tempTotalPrice = tempQty * product.price
           }
 
-          if (option === 'DEC') {
+          if (option === Options.DEC) {
             tempQty--
             if (tempQty < 1) tempQty = 1
             tempTotalPrice = tempQty * product.price
@@ -96,7 +107,9 @@ export const cartSlice = createSlice({
     getCartTotal: (state) => {
       state.totalAmount = state.productList.reduce(
         (acumulador, currentvalue) => {
-          acumulador += currentvalue.totalPrice
+          if (currentvalue && currentvalue.totalPrice !== undefined) {
+            acumulador += currentvalue.totalPrice
+          }
           return acumulador
         },
         0
@@ -106,7 +119,9 @@ export const cartSlice = createSlice({
     getProductsCart: (state) => {
       state.productsCount = state.productList.reduce(
         (acumulador, currentvalue) => {
-          acumulador += currentvalue.quantity
+          if (currentvalue && currentvalue.quantity !== undefined) {
+            acumulador += currentvalue.quantity
+          }
           return acumulador
         },
         0

@@ -1,14 +1,16 @@
+import { Product } from '@/types/interface.d'
 import { BASE_URL, STATUS } from '@/utils'
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
+import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 interface CategotiesState {
-  searchProduct: string[]
+  searchProduct: Product[]
   searchProductStatus: string
   error: string | undefined
 }
 
 const initialState: CategotiesState = {
   searchProduct: [],
+  // searchProduct: {} as Product,
   searchProductStatus: STATUS.IDLE,
   error: undefined
 }
@@ -19,13 +21,16 @@ const SearchSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
-      .addCase(fetchSearchProduct.pending, (state, action) => {
+      .addCase(fetchSearchProduct.pending, (state) => {
         state.searchProductStatus = STATUS.LOADING
       })
-      .addCase(fetchSearchProduct.fulfilled, (state, action) => {
-        state.searchProduct = action.payload
-        state.searchProductStatus = STATUS.SUCCEEDED
-      })
+      .addCase(
+        fetchSearchProduct.fulfilled,
+        (state, action: PayloadAction<Product[]>) => {
+          state.searchProduct = action.payload
+          state.searchProductStatus = STATUS.SUCCEEDED
+        }
+      )
       .addCase(fetchSearchProduct.rejected, (state, action) => {
         state.searchProductStatus = STATUS.FAILED
         state.error = action.error.message
@@ -35,10 +40,8 @@ const SearchSlice = createSlice({
 
 export const fetchSearchProduct = createAsyncThunk(
   'searchProduct/fetch',
-  async (productSearch) => {
-    const response = await fetch(
-      `${BASE_URL}products/search?q=${productSearch}`
-    )
+  async ({ search }: { search: string }) => {
+    const response = await fetch(`${BASE_URL}products/search?q=${search}`)
     const data = await response.json()
     return data.products
   }

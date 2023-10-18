@@ -1,9 +1,10 @@
 'use client'
-
 import { useAppDispatch, useAppSelector } from '@/hooks/store'
 import { addCart } from '@/slices/cartSlice'
 import { fetchSingleProduct } from '@/slices/productsSlice'
+import { Product } from '@/types/interface.d'
 import { STATUS } from '@/utils'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -41,7 +42,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
     })
   }
 
-  const handleAddCart = (singleProduct) => {
+  const handleAddCart = (singleProduct: Product) => {
     setQty(1)
     const totalPrice = qty * singleProduct.price
     dispatch(addCart({ ...singleProduct, quantity: qty, totalPrice }))
@@ -54,7 +55,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
 
   useEffect(() => {
     ;(async () => await dispatch(fetchSingleProduct({ id })))()
-  }, [])
+  }, [id, dispatch])
 
   function Message() {
     return (
@@ -72,16 +73,20 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
       {status === STATUS.LOADING && (
         <div className='text-center text-3xl font-bold'>Loading...</div>
       )}
+
       {status === STATUS.FAILED && <div>{error}</div>}
+
       {showMessage && <Message />}
 
-      <div className='min-h-[90vh]  bg-slate-50 grid md:grid-cols-2 overflow-hidden place-content-center pb-10 md:pb-0 md:gap-x-8 gap-y-0 px-8 lg:px-0'>
+      <div className='min-h-[90vh]  bg-slate-50 grid md:grid-cols-2 overflow-hidden place-content-center pb-10 md:pb-0 md:gap-x-8 gap-y-0 px-8 lg:px-0 section'>
         <section className='h-[100%] w-full overflow-hidden'>
           <figure>
-            <img
+            <Image
               src={images?.[0]}
               alt={title}
               className='object-contain w-full aspect-[3/2] bottom-0'
+              width={300}
+              height={300}
             />
           </figure>
         </section>
@@ -127,7 +132,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
                 onClick={() => {
                   handleAddCart(singleProduct)
                 }}
-                className='bg-blue-600 rounded-sm px-6 py-2 font-medium text-white hover:bg-white hover:bg-blue-600/90 border border-bbg-blue-600'
+                className='bg-blue-600 rounded-sm px-6 py-2 font-medium text-white hover:bg-blue-600/90 border border-bbg-blue-600'
               >
                 Add to Cart
               </button>
@@ -135,7 +140,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
                 href='/'
                 className='bg-white rounded-sm px-6 py-2 font-medium text-bbg-blue-600 border border-bbg-blue-600 hover:bg-blue-600/10'
               >
-                Buy Now
+                Add More Items
               </Link>
             </div>
           </div>

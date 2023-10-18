@@ -14,6 +14,10 @@
     @apply  text-5xl mb-8  md:mb-[4rem] text-center tracking-wide font-extrabold text-[#006fee] drop-shadow-lg shadow-yellow-700 
   }
   .section {
-    @apply  mx-auto max-w-6xl
+    @apply  mx-auto max-w-6xl px-2 md:px-6 xl:px-0
   }
+}
+
+.balance{
+  text-wrap: balance;
 }

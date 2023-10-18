@@ -2,26 +2,28 @@
 import Link from 'next/link'
 import { MobileNavigation } from './MobileNavigation'
 import { SearchForm } from './SearchForm'
-import { CartSVG } from './IconSVG'
+import { CartSVG } from '../IconSVG'
 import { useAppSelector } from '@/hooks/store'
+import { ProdcustWithQ } from '@/types/interface'
 
 const Navbar = () => {
-  // const products = useSelector((state) => state.cart.productList)
+  const products: ProdcustWithQ[] = useAppSelector(
+    (state) => state.cart.productList
+  )
 
-  // const longProducts = products.reduce((acumulador, currentvalue) => {
-  //   acumulador += currentvalue.quantity
-  //   return acumulador
-  // }, 0)
+  const longProducts: number = products.reduce((acumulador, currentvalue) => {
+    acumulador += currentvalue.quantity
+    return acumulador
+  }, 0)
+
   const categories = useAppSelector((state) => state.categories.categories)
 
   return (
     <header className='section'>
-      <nav className='py-3 md:py-4 px-6 lg:px-0'>
+      <nav className='py-3 md:py-4'>
         <div className='flex justify-between items-start'>
           <div className='flex items-end gap-[2px] grow lg:grow-0'>
-            {/* menu de caltegotrias en mobile */}
             <MobileNavigation />
-            {/* ------- */}
             <Link href='/' className='flex-grow inline-flex justify-center'>
               <div className=''>
                 <h1 className='text-xl lg:text-2xl font-bold bg-blue-600 text-white py-1 px-4 rounded-tl-2xl rounded-br-2xl'>
@@ -37,13 +39,12 @@ const Navbar = () => {
 
           <div className='inline-block py-[.40rem] relative pr-[1.3rem]'>
             <span className='absolute top-[-.30rem] right-[0rem] bg-red-700 w-6 h-6 rounded-[100%] text-white text-xs inline-grid place-items-center'>
-              {/* {longProducts} */}0
+              {longProducts}
             </span>
             <Link href='/cart'>
               <CartSVG />
             </Link>
           </div>
-          {/*  */}
         </div>
       </nav>
 
@@ -52,7 +53,7 @@ const Navbar = () => {
           <ul key={index} className='flex flex-row'>
             <li className='cursor-pointer'>
               <Link
-                href={`category/${category}`}
+                href={`/category/${category}`}
                 className='font-light capitalize text-shade-500 text-white'
               >
                 {category.replace('-', ' ')}

@@ -1,6 +1,6 @@
 'use client'
 import { useState } from 'react'
-import { SearchSVG } from './IconSVG'
+import { SearchSVG } from '../IconSVG'
 import { useRouter } from 'next/navigation'
 
 export function SearchForm() {
@@ -12,7 +12,7 @@ export function SearchForm() {
     if (search === '') {
       return null
     }
-    router.push(`search/${search}`)
+    router.push(`/search/${search}`)
     setSearch('')
   }
 
@@ -22,7 +22,7 @@ export function SearchForm() {
   }
 
   return (
-    <div className='w-full px-6 lg:px-0'>
+    <div className='w-full'>
       <form
         onSubmit={handleSubmit}
         className='relative w-full overflow-hidden border border-gray-300 rounded-lg'

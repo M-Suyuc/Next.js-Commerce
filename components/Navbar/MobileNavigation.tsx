@@ -2,7 +2,7 @@
 import { useAppSelector } from '@/hooks/store'
 import Link from 'next/link'
 import { useState } from 'react'
-import { CloseSVG, MenuSVG } from './IconSVG'
+import { CloseSVG, MenuSVG } from '../IconSVG'
 
 export function MobileNavigation() {
   const [navbar, setNavbar] = useState(false)

@@ -8,27 +8,21 @@ import {
 } from '@/slices/categoriesSlice'
 import { STATUS } from '@/utils'
 import { ListOfProducts } from './ListOfProducts'
-// import { store } from '@/store'
+import { Product } from '@/types/interface.d'
 
 export const ProductsList: React.FC = () => {
   const dispatch = useAppDispatch()
-
   const allProducts = useAppSelector((state) => state.products.products)
-  const categoriProducts = useAppSelector(
+  const categoryProducts = useAppSelector(
     (state) => state.categories.productsByCategory
   )
-
   const categories = useAppSelector((state) => state.categories.categories)
   const status = useAppSelector((state) => state.categories.categoriesStatus)
   const error = useAppSelector((state) => state.products.errorProducts)
 
-  const [category, setCategory] = useState<string>('')
-
-  // const lastReturnedAction = async () =>
-  //   await store.dispatch(fetchAllProducts())
+  const [category, setCategory] = useState('')
 
   useEffect(() => {
-    // lastReturnedAction()
     dispatch(fetchAllProducts())
     dispatch(fetchAllCategories())
   }, [dispatch])
@@ -37,14 +31,13 @@ export const ProductsList: React.FC = () => {
     dispatch(fetchProductsByCategory({ category }))
   }, [category, dispatch])
 
-  const products = category === '' ? allProducts : categoriProducts
+  const products = category === '' ? allProducts : categoryProducts
 
-  type Temp = string[] | undefined
+  const tempProducts: Product[] = []
 
-  const tempProducts: Temp = []
-  if (products.length > 0) {
+  if (products?.length > 0) {
     for (const i in products) {
-      let randomIndex = Math.floor(Math.random() * products.length)
+      let randomIndex: number = Math.floor(Math.random() * products.length)
 
       while (tempProducts.includes(products[randomIndex])) {
         randomIndex = Math.floor(Math.random() * products.length)
@@ -55,10 +48,8 @@ export const ProductsList: React.FC = () => {
 
   return (
     <>
-      <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize'>
-        {category === undefined
-          ? 'All products'
-          : `${category.replace('-', ' ')}`}
+      <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize '>
+        {category ? category.replace('-', ' ') : 'All products'}
       </div>
       <div className='md:flex md:gap-2'>
         <aside className='hidden md:block h-screen lg:h-[70vh] bg-white min-w-[180px] overflow-y-auto overflow-x-hidden border border-slate-300'>

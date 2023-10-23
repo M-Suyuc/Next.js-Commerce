@@ -1,4 +1,3 @@
-/* eslint-disable @next/next/no-img-element */
 'use client'
 import { useAppDispatch, useAppSelector } from '@/hooks/store'
 import {
@@ -12,8 +11,9 @@ import { Options } from '@/types/enum.d'
 
 import { useEffect } from 'react'
 import { DeleteSVG } from '@/components/IconSVG'
+import Image from 'next/image'
 
-function CartPage() {
+const CartPage = () => {
   const dispatch = useAppDispatch()
 
   const products = useAppSelector((state) => state.cart.productList)
@@ -40,11 +40,16 @@ function CartPage() {
           {/* --- */}
           <div className='flex justify-between pb-2'>
             <div className='flex justify-between gap-4'>
-              <img className='w-20 object-cover' src={images[0]} alt={title} />
+              <Image
+                className='object-contain'
+                width={80}
+                height={130}
+                src={images[0]}
+                alt={title}
+              />
               <div className='flex flex-col justify-between'>
                 <h3 className='font-semibold text-lg'>{title}</h3>
                 <div className='flex gap-1 md:gap-4 items-center'>
-                  {/* dispatch(toggleCartQty({ id, option: 'DEC' })) */}
                   <button
                     className='font-semibold px-3 py-1 border border-slate-300 hover:bg-gray-300'
                     onClick={() =>
@@ -154,4 +159,5 @@ function CartPage() {
     </>
   )
 }
+
 export default CartPage

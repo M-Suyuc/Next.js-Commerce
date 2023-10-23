@@ -6,16 +6,21 @@ import {
 import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 function ShowLocalStorage() {
-  const cart = window.localStorage.getItem('cart')
-  if (cart) {
-    return JSON.parse(cart)
+  if (typeof localStorage !== 'undefined') {
+    const cart = localStorage.getItem('cart')
+    if (cart) {
+      return JSON.parse(cart)
+    }
   } else {
     return []
   }
 }
 
 function LocalStorage(params: ProdcustWithQ[]) {
-  window.localStorage.setItem('cart', JSON.stringify(params))
+  if (typeof localStorage !== 'undefined') {
+    localStorage.setItem('cart', JSON.stringify(params))
+    return
+  }
 }
 
 interface CartState {
@@ -63,6 +68,7 @@ export const cartSlice = createSlice({
     },
 
     DeleteProduct: (state, action: PayloadAction<number>) => {
+      console.log(action.payload)
       const delProduct = state.productList.filter(
         (item) => item.id !== action.payload
       )

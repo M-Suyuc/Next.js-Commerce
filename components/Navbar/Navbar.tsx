@@ -12,7 +12,9 @@ const Navbar = () => {
   )
 
   const longProducts: number = products.reduce((acumulador, currentvalue) => {
-    acumulador += currentvalue.quantity
+    if (currentvalue && currentvalue.quantity !== undefined) {
+      acumulador += currentvalue.quantity
+    }
     return acumulador
   }, 0)
 

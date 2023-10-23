@@ -1,10 +1,10 @@
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
-
-import { Providers } from '@/provider/Providers'
 import Navbar from '@/components/Navbar/Navbar'
 import Footer from '@/components/Footer'
+import { Providers } from '@/provider/Providers'
+import type { Metadata } from 'next'
+import { Inter } from 'next/font/google'
+import './globals.css'
+import { Suspense } from 'react'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -14,7 +14,7 @@ export const metadata: Metadata = {
     'e-commerce: proyect created with Nextjs Redux Toolkit Tailwind CSS'
 }
 
-export default function RootLayout({
+export default async function RootLayout({
   children
 }: {
   children: React.ReactNode
@@ -24,7 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          {children}
+          <Suspense>{children}</Suspense>
           <Footer />
         </Providers>
       </body>

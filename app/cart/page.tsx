@@ -28,7 +28,6 @@ const CartPage = () => {
 
   useEffect(() => {
     dispatch(getTotalCart())
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [products, dispatch])
 
   function ProductsMap({ products }: { products: ProdcustWithQ[] }) {

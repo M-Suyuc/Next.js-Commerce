@@ -44,7 +44,7 @@ const Footer = () => {
               <h3 className='text-lg font-bold'>Menú</h3>
               <li className=''>
                 <Link
-                  href=''
+                  href='/'
                   className='text-gray-600 text-lg hover:text-gray-400'
                 >
                   Inicio
@@ -52,7 +52,7 @@ const Footer = () => {
               </li>
               <li className=''>
                 <Link
-                  href=''
+                  href='#'
                   className='text-gray-600 text-lg hover:text-gray-400'
                 >
                   Categorias
@@ -66,23 +66,23 @@ const Footer = () => {
               <li className=''>
                 <Link
                   className='text-gray-600 text-lg hover:text-gray-400'
-                  href=''
+                  href='#'
                 >
                   Todo
                 </Link>
               </li>
               <li className=''>
                 <Link
-                  className=' text-gray-600 text-lg hover:text-gray-400'
                   href='category/smartphones'
+                  className=' text-gray-600 text-lg hover:text-gray-400'
                 >
                   Phones
                 </Link>
               </li>
               <li className=''>
                 <Link
-                  className='text-gray-600 text-lg hover:text-gray-400'
                   href='category/laptops'
+                  className='text-gray-600 text-lg hover:text-gray-400'
                 >
                   Laptops
                 </Link>

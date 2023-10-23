@@ -49,7 +49,7 @@ export const ProductsList: React.FC = () => {
   return (
     <>
       <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize '>
-        {category ? category.replace('-', ' ') : 'All products'}
+        {category ? category.replace('-', ' ') : 'Products'}
       </div>
       <div className='md:flex md:gap-2'>
         <aside className='hidden md:block h-screen lg:h-[70vh] bg-white min-w-[180px] overflow-y-auto overflow-x-hidden border border-slate-300'>

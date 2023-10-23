@@ -20,14 +20,12 @@ const CartPage = () => {
   const totalAmount = useAppSelector((state) => state.cart.totalAmount)
   const productsCount = useAppSelector((state) => state.cart.productsCount)
 
-  const getTotalCart = () => dispatch(getCartTotal())
-  const clearProductsCart = () => dispatch(clearCart())
   const toggleProductQty = ({ id, option }: { id: number; option: string }) =>
     dispatch(toggleCartQty({ id, option }))
   const deleteProduct = ({ id }: { id: number }) => dispatch(DeleteProduct(id))
 
   useEffect(() => {
-    dispatch(getTotalCart())
+    dispatch(getCartTotal())
   }, [products, dispatch])
 
   function ProductsMap({ products }: { products: ProdcustWithQ[] }) {
@@ -103,7 +101,7 @@ const CartPage = () => {
             <ProductsMap products={products} />
             <button
               className='bg-red-700 py-1 px-4 text-white font-semibold'
-              onClick={() => clearProductsCart()}
+              onClick={() => dispatch(clearCart())}
             >
               Clear Cart
             </button>

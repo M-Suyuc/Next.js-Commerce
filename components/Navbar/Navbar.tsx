@@ -3,22 +3,20 @@ import Link from 'next/link'
 import { MobileNavigation } from './MobileNavigation'
 import { SearchForm } from './SearchForm'
 import { CartSVG } from '../IconSVG'
-import { useAppSelector } from '@/hooks/store'
-import { ProdcustWithQ } from '@/types/interface'
+import { useAppDispatch, useAppSelector } from '@/hooks/store'
+import { getProductsCart } from '@/slices/cartSlice'
+import { useEffect } from 'react'
 
 const Navbar = () => {
-  const products: ProdcustWithQ[] = useAppSelector(
-    (state) => state.cart.productList
-  )
+  const dispatch = useAppDispatch()
 
-  const longProducts: number = products.reduce((acumulador, currentvalue) => {
-    if (currentvalue && currentvalue.quantity !== undefined) {
-      acumulador += currentvalue.quantity
-    }
-    return acumulador
-  }, 0)
-
+  const products = useAppSelector((state) => state.cart.productList)
+  const productsCount = useAppSelector((state) => state.cart.productsCount)
   const categories = useAppSelector((state) => state.categories.categories)
+
+  useEffect(() => {
+    dispatch(getProductsCart())
+  }, [products, dispatch])
 
   return (
     <header className='section'>
@@ -41,7 +39,7 @@ const Navbar = () => {
 
           <div className='inline-block py-[.40rem] relative pr-[1.3rem]'>
             <span className='absolute top-[-.30rem] right-[0rem] bg-red-700 w-6 h-6 rounded-[100%] text-white text-xs inline-grid place-items-center'>
-              {longProducts}
+              {productsCount}
             </span>
             <Link href='/cart'>
               <CartSVG />

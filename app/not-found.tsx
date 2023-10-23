@@ -1,6 +1,6 @@
 import Link from 'next/link'
 
-function NotFound() {
+export default function NotFound() {
   return (
     <div className='min-h-[90vh] flex justify-center items-center text-center'>
       <div>
@@ -13,5 +13,3 @@ function NotFound() {
     </div>
   )
 }
-
-export default NotFound

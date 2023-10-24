@@ -4,6 +4,7 @@ import {
   DeleteProduct,
   clearCart,
   getCartTotal,
+  getProductsCart,
   toggleCartQty
 } from '@/slices/cartSlice'
 import { type ProdcustWithQ } from '@/types/interface.d'
@@ -26,6 +27,7 @@ const CartPage = () => {
 
   useEffect(() => {
     dispatch(getCartTotal())
+    dispatch(getProductsCart())
   }, [products, dispatch])
 
   function ProductsMap({ products }: { products: ProdcustWithQ[] }) {

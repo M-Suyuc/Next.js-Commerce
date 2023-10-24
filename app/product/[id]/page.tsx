@@ -4,7 +4,6 @@ import { addCart } from '@/slices/cartSlice'
 import { fetchSingleProduct } from '@/slices/productsSlice'
 import { Product } from '@/types/interface.d'
 import { STATUS } from '@/utils'
-import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -23,6 +22,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
 
   const { images, title, description, brand, price, rating, category } =
     singleProduct
+  const imageUrl = images && images.length > 0 ? images[0] : ''
 
   const [qty, setQty] = useState(1)
   const [showMessage, setShowMessage] = useState(false)
@@ -78,24 +78,22 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
 
       {showMessage && <Message />}
 
-      <div className='min-h-[90vh]  bg-slate-50 grid md:grid-cols-2 overflow-hidden place-content-center pb-10 md:pb-0 md:gap-x-8 gap-y-0 px-8 lg:px-0 section'>
-        <section className='h-[100%] w-full overflow-hidden'>
-          <figure>
-            <Image
-              src={images?.[0]}
-              alt={title}
-              className='object-contain w-full aspect-[3/2] bottom-0'
-              width={300}
-              height={300}
+      <div className='section min-h-[90vh] bg-slate-50 grid md:grid-cols-2 overflow-hidden justify-center items-center py-10 md:py-0 md:gap-x-8 gap-y-0'>
+        <section className='w-full  overflow-hidden'>
+          <div className='w-full aspect-video overflow-hidden'>
+            <img
+              src={imageUrl}
+              alt={`imagen-${title}`}
+              className='w-full h-full object-contain'
             />
-          </figure>
+          </div>
         </section>
         <section className='text-shade-500 pr-2 mt-8 md:mt-0'>
           <h4 className='text-3xl font-bold text-shade-500 mb-4'>{title}</h4>
           <p className='mb-2'>{description}</p>
           <div className='mb-2 flex gap-4'>
             <span className='text-shade-500 font-medium'>
-              Rating{' '}
+              Rating
               <span className='text-slate-500 font-normal'>{rating}</span>
             </span>
             |
@@ -104,7 +102,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
             </span>
             |
             <span className='text-shade-  font-medium'>
-              Categoty{' '}
+              Categoty
               <span className='text-slate-500 font-normal'>{category}</span>
             </span>
           </div>

@@ -123,15 +123,19 @@ export const cartSlice = createSlice({
     },
 
     getProductsCart: (state) => {
-      state.productsCount = state.productList.reduce(
-        (acumulador, currentvalue) => {
-          if (currentvalue && currentvalue.quantity !== undefined) {
-            acumulador += currentvalue.quantity
-          }
-          return acumulador
-        },
-        0
-      )
+      if (Array.isArray(state.productList)) {
+        state.productsCount = state.productList.reduce(
+          (acumulador, currentValue) => {
+            if (currentValue && currentValue.quantity !== undefined) {
+              acumulador += currentValue.quantity
+            }
+            return acumulador
+          },
+          0
+        )
+      } else {
+        console.error('state.productList no es un arreglo válido')
+      }
     }
   }
 })

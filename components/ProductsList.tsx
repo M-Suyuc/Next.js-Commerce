@@ -28,6 +28,7 @@ export const ProductsList: React.FC = () => {
   }, [dispatch])
 
   useEffect(() => {
+    if (!category) return
     dispatch(fetchProductsByCategory({ category }))
   }, [category, dispatch])
 

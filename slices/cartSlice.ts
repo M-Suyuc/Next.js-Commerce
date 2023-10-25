@@ -7,19 +7,15 @@ import { PayloadAction, createSlice } from '@reduxjs/toolkit'
 
 function ShowLocalStorage() {
   if (typeof localStorage !== 'undefined') {
-    const cart = localStorage.getItem('cart')
-    if (cart) {
-      return JSON.parse(cart)
-    }
-  } else {
-    return []
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]')
+    localStorage.setItem('cart', JSON.stringify(cart))
+    return cart
   }
 }
 
 function LocalStorage(params: ProdcustWithQ[]) {
   if (typeof localStorage !== 'undefined') {
     localStorage.setItem('cart', JSON.stringify(params))
-    return
   }
 }
 
@@ -111,15 +107,19 @@ export const cartSlice = createSlice({
     },
 
     getCartTotal: (state) => {
-      state.totalAmount = state.productList.reduce(
-        (acumulador, currentvalue) => {
-          if (currentvalue && currentvalue.totalPrice !== undefined) {
-            acumulador += currentvalue.totalPrice
-          }
-          return acumulador
-        },
-        0
-      )
+      if (Array.isArray(state.productList)) {
+        state.totalAmount = state.productList.reduce(
+          (acumulador, currentvalue) => {
+            if (currentvalue && currentvalue.totalPrice !== undefined) {
+              acumulador += currentvalue.totalPrice
+            }
+            return acumulador
+          },
+          0
+        )
+      } else {
+        console.error('state.productList no es un arreglo válido')
+      }
     },
 
     getProductsCart: (state) => {

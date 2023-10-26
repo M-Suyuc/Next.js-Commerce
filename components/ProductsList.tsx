@@ -1,6 +1,6 @@
 'use client'
-import { useEffect, useState } from 'react'
-import { useAppDispatch, useAppSelector } from '@/hooks/store'
+import { useCallback, useEffect, useState } from 'react'
+import { useAppDispatch } from '@/hooks/store'
 import { fetchAllProducts } from '@/slices/productsSlice'
 import {
   fetchAllCategories,
@@ -8,19 +8,20 @@ import {
 } from '@/slices/categoriesSlice'
 import { STATUS } from '@/utils'
 import { ListOfProducts } from './ListOfProducts'
-import { Product } from '@/types/interface.d'
+import { useFilters } from '@/hooks/useFilters'
+import { Filters } from './Filters'
+import { Product } from '@/types/interface'
+import { useStateCategories } from '@/hooks/useStateCategories'
+import { useStateProducts } from '@/hooks/useStateProducts'
 
 export const ProductsList: React.FC = () => {
   const dispatch = useAppDispatch()
-  const allProducts = useAppSelector((state) => state.products.products)
-  const categoryProducts = useAppSelector(
-    (state) => state.categories.productsByCategory
-  )
-  const categories = useAppSelector((state) => state.categories.categories)
-  const status = useAppSelector((state) => state.categories.categoriesStatus)
-  const error = useAppSelector((state) => state.products.errorProducts)
+  const { errorProducts, products } = useStateProducts()
+  const { categories, categoriesStatus, productsByCategory } =
+    useStateCategories()
 
   const [category, setCategory] = useState('')
+  const { filtersProducts } = useFilters()
 
   useEffect(() => {
     dispatch(fetchAllProducts())
@@ -32,28 +33,43 @@ export const ProductsList: React.FC = () => {
     dispatch(fetchProductsByCategory({ category }))
   }, [category, dispatch])
 
-  const products = category === '' ? allProducts : categoryProducts
+  // ------------------------------
+
+  const productsRender = category === '' ? products : productsByCategory
 
   const tempProducts: Product[] = []
+  // console.log(tempProducts)
 
-  if (products?.length > 0) {
-    for (const i in products) {
-      let randomIndex: number = Math.floor(Math.random() * products.length)
+  const randomIndex = useCallback(
+    async (products: Product[]) => {
+      if (products.length > 0) {
+        for (const i in products) {
+          let randomIndex: number = Math.floor(Math.random() * products.length)
 
-      while (tempProducts.includes(products[randomIndex])) {
-        randomIndex = Math.floor(Math.random() * products.length)
+          while (tempProducts.includes(products[randomIndex])) {
+            randomIndex = Math.floor(Math.random() * products.length)
+          }
+          tempProducts[i] = products[randomIndex]
+        }
       }
-      tempProducts[i] = products[randomIndex]
-    }
-  }
+    },
+    [products]
+  )
+  // randomIndex(products)
+
+  // const filteredProducts = filtersProducts(tempProducts)
+  // const filteredProducts = filtersProducts(products)
 
   return (
-    <>
-      <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize '>
+    <section className=''>
+      <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize w-full'>
         {category ? category.replace('-', ' ') : 'Products'}
       </div>
-      <div className='md:flex md:gap-2'>
+      <Filters />
+      {/* ------------------- */}
+      <div className='flex md:gap-2'>
         <aside className='hidden md:block h-screen lg:h-[70vh] bg-white min-w-[180px] overflow-y-auto overflow-x-hidden border border-slate-300'>
+          {/* border border-slate-300 */}
           <h4 className='text-lg lg:text-2xl font-bold  border-b border-solid py-3 text-left px-2'>
             Categories
           </h4>
@@ -73,14 +89,15 @@ export const ProductsList: React.FC = () => {
           ))}
         </aside>
 
-        <div>
-          {status === STATUS.LOADING && (
+        <div className='w-full'>
+          {categoriesStatus === STATUS.LOADING && (
             <div className='text-center text-4xl font-bold'>Loading...</div>
           )}
-          {status === STATUS.FAILED && <div>{error}</div>}
-          <ListOfProducts products={tempProducts} />
+          {categoriesStatus === STATUS.FAILED && <div>{errorProducts}</div>}
+          {/* <ListOfProducts products={filteredProducts} /> */}
+          <ListOfProducts products={productsRender} />
         </div>
       </div>
-    </>
+    </section>
   )
 }

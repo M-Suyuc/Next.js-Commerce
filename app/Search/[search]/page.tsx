@@ -1,6 +1,7 @@
 'use client'
 import { ListOfProducts } from '@/components/ListOfProducts'
-import { useAppDispatch, useAppSelector } from '@/hooks/store'
+import { useAppDispatch } from '@/hooks/store'
+import { useStateSearch } from '@/hooks/useStateSearch'
 import { fetchSearchProduct } from '@/slices/searchSlice'
 import { STATUS } from '@/utils'
 import { useEffect } from 'react'
@@ -13,8 +14,7 @@ interface ProductPageProps {
 
 const SearchProduct: React.FC<ProductPageProps> = ({ params: { search } }) => {
   const dispatch = useAppDispatch()
-  const products = useAppSelector((state) => state.search.searchProduct)
-  const status = useAppSelector((state) => state.search.searchProductStatus)
+  const { searchError, searchProducts, searchStatus } = useStateSearch()
 
   useEffect(() => {
     dispatch(fetchSearchProduct({ search }))
@@ -22,15 +22,18 @@ const SearchProduct: React.FC<ProductPageProps> = ({ params: { search } }) => {
 
   return (
     <div className='section'>
-      {status === STATUS.LOADING && (
+      {searchStatus === STATUS.LOADING && (
         <div className='text-center text-3xl font-bold'>Loading...</div>
       )}
-      {products.length > 0 ? (
+      {searchError && (
+        <div className='text-center text-3xl font-bold'>{searchError}</div>
+      )}
+      {searchProducts.length > 0 ? (
         <>
           <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize'>
             {search.replace('-', ' ')}
           </div>
-          <ListOfProducts products={products} />
+          <ListOfProducts products={searchProducts} />
         </>
       ) : (
         <div className='min-h-[80vh]'>

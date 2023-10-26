@@ -1,6 +1,9 @@
 'use client'
+import { Filters } from '@/components/Filters'
 import { ListOfProducts } from '@/components/ListOfProducts'
-import { useAppDispatch, useAppSelector } from '@/hooks/store'
+import { useAppDispatch } from '@/hooks/store'
+import { useFilters } from '@/hooks/useFilters'
+import { useStateCategories } from '@/hooks/useStateCategories'
 import { fetchProductsByCategory } from '@/slices/categoriesSlice'
 import { STATUS } from '@/utils'
 import { useEffect } from 'react'
@@ -13,13 +16,10 @@ interface ProductPageProps {
 
 const CategoryPage: React.FC<ProductPageProps> = ({ params: { category } }) => {
   const dispatch = useAppDispatch()
+  const { filtersProducts } = useFilters()
+  const { productsByCategory, categoriesStatus } = useStateCategories()
 
-  const products = useAppSelector(
-    (state) => state.categories.productsByCategory
-  )
-  const status = useAppSelector(
-    (state) => state.categories.productsByCategoryStatus
-  )
+  const filteredProducts = filtersProducts(productsByCategory)
 
   useEffect(() => {
     dispatch(fetchProductsByCategory({ category }))
@@ -30,10 +30,11 @@ const CategoryPage: React.FC<ProductPageProps> = ({ params: { category } }) => {
       <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize'>
         {category.replace('-', ' ')}
       </div>
-      {status === STATUS.LOADING && (
+      {categoriesStatus === STATUS.LOADING && (
         <div className='text-center text-3xl font-bold'>Loading...</div>
       )}
-      {products && <ListOfProducts products={products} />}
+      <Filters />
+      {productsByCategory && <ListOfProducts products={filteredProducts} />}
     </div>
   )
 }

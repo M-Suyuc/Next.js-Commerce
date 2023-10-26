@@ -1,12 +1,12 @@
 'use client'
-import { useAppSelector } from '@/hooks/store'
 import Link from 'next/link'
 import { useState } from 'react'
 import { CloseSVG, MenuSVG } from '../IconSVG'
+import { useStateCategories } from '@/hooks/useStateCategories'
 
 export function MobileNavigation() {
   const [navbar, setNavbar] = useState(false)
-  const categories = useAppSelector((state) => state.categories.categories)
+  const { categories } = useStateCategories()
 
   const handleClick = () => {
     setNavbar(!navbar)

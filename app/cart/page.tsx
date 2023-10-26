@@ -1,5 +1,5 @@
 'use client'
-import { useAppDispatch, useAppSelector } from '@/hooks/store'
+import { useAppDispatch } from '@/hooks/store'
 import {
   DeleteProduct,
   clearCart,
@@ -13,25 +13,24 @@ import { Options } from '@/types/enum.d'
 import { useEffect } from 'react'
 import { DeleteSVG } from '@/components/IconSVG'
 import Image from 'next/image'
+import { useStateCart } from '@/hooks/useStatecart'
 
 const CartPage = () => {
   const dispatch = useAppDispatch()
-
-  const products = useAppSelector((state) => state.cart.productList)
-  const totalAmount = useAppSelector((state) => state.cart.totalAmount)
-  const productsCount = useAppSelector((state) => state.cart.productsCount)
+  const { cartProducts, cartProductsCount, cartTotalAmount } = useStateCart()
 
   const toggleProductQty = ({ id, option }: { id: number; option: string }) =>
     dispatch(toggleCartQty({ id, option }))
+
   const deleteProduct = ({ id }: { id: number }) => dispatch(DeleteProduct(id))
 
   useEffect(() => {
     dispatch(getCartTotal())
     dispatch(getProductsCart())
-  }, [products, dispatch])
+  }, [cartProducts, dispatch])
 
-  function ProductsMap({ products }: { products: ProdcustWithQ[] }) {
-    return products.map(({ id, images, title, price, quantity }) => {
+  function ProductsMap({ cartProducts }: { cartProducts: ProdcustWithQ[] }) {
+    return cartProducts.map(({ id, images, title, price, quantity }) => {
       const quantityValue = quantity ?? 0
 
       return (
@@ -94,13 +93,13 @@ const CartPage = () => {
     })
   }
 
-  function UiProducts({ products }: { products: ProdcustWithQ[] }) {
+  function UiProducts({ cartProducts }: { cartProducts: ProdcustWithQ[] }) {
     return (
       <>
         <h2 className='text-3xl font-bold text-black pb-8'>MY SHOPPING CART</h2>
         <div className='flex flex-col md:flex-row gap-8'>
           <div className='w-full md:w-[60%] lg:w-[65%] min-h-[170px]'>
-            <ProductsMap products={products} />
+            <ProductsMap cartProducts={cartProducts} />
             <button
               className='bg-red-700 py-1 px-4 text-white font-semibold'
               onClick={() => dispatch(clearCart())}
@@ -117,9 +116,9 @@ const CartPage = () => {
               <main className=''>
                 <div className='flex justify-between'>
                   <h4>
-                    selected <span>{productsCount}</span> item(s) price{' '}
+                    selected <span>{cartProductsCount}</span> item(s) price
                   </h4>
-                  <span>${totalAmount}.00</span>
+                  <span>${cartTotalAmount}.00</span>
                 </div>
                 <div className='flex justify-between'>
                   <h4>Discount</h4>
@@ -134,7 +133,7 @@ const CartPage = () => {
             <aside className='w-full  pt-1'>
               <div className='flex justify-between border-t border-gray-300 py-1'>
                 <h4 className='font-semibold'>Total</h4>
-                <span className='font-medium'>${totalAmount}.00</span>
+                <span className='font-medium'>${cartTotalAmount}.00</span>
               </div>
               <button className='bg-blue-600 w-full py-2 rounded-md text-white font-medium'>
                 Proceed to checkout
@@ -149,8 +148,8 @@ const CartPage = () => {
   return (
     <>
       <section className='min-h-[80vh] section bg-slate-100  pt-4 pb-16'>
-        {products?.length > 0 ? (
-          <UiProducts products={products} />
+        {cartProducts?.length > 0 ? (
+          <UiProducts cartProducts={cartProducts} />
         ) : (
           <h4 className='text-3xl text-center font-medium'>No products</h4>
         )}

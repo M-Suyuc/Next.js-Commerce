@@ -1,5 +1,6 @@
 'use client'
-import { useAppDispatch, useAppSelector } from '@/hooks/store'
+import { useAppDispatch } from '@/hooks/store'
+import { useStateProducts } from '@/hooks/useStateProducts'
 import { addCart } from '@/slices/cartSlice'
 import { fetchSingleProduct } from '@/slices/productsSlice'
 import { Product } from '@/types/interface.d'
@@ -15,13 +16,11 @@ interface ProductPageProps {
 
 const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
   const dispatch = useAppDispatch()
-
-  const singleProduct = useAppSelector((state) => state.products.singleProduct)
-  const status = useAppSelector((state) => state.products.singleProductStatus)
-  const error = useAppSelector((state) => state.products.errorSingleProduct)
+  const { singleProduct, errorProducts, productsStatus } = useStateProducts()
 
   const { images, title, description, brand, price, rating, category } =
     singleProduct
+
   const imageUrl = images && images.length > 0 ? images[0] : ''
 
   const [qty, setQty] = useState(1)
@@ -54,7 +53,7 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
   }
 
   useEffect(() => {
-    ;(async () => await dispatch(fetchSingleProduct({ id })))()
+    ;(() => dispatch(fetchSingleProduct({ id })))()
   }, [id, dispatch])
 
   function Message() {
@@ -70,11 +69,11 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
   return (
     <>
       {/* <h1>{JSON.stringify(singleProduct, null, 2)}</h1> */}
-      {status === STATUS.LOADING && (
+      {productsStatus === STATUS.LOADING && (
         <div className='text-center text-3xl font-bold'>Loading...</div>
       )}
 
-      {status === STATUS.FAILED && <div>{error}</div>}
+      {productsStatus === STATUS.FAILED && <div>{errorProducts}</div>}
 
       {showMessage && <Message />}
 

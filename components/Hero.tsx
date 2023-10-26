@@ -1,6 +1,5 @@
 'use client'
 import imgHero from '@/public/img3.png'
-import { Button } from '@/components/Button'
 
 const Hero = () => {
   const scrollToSection = (sectionId: string): void => {
@@ -26,12 +25,14 @@ const Hero = () => {
           competitive prices. From cutting-edge electronics to elegant fashion
           and home goods, we have everything you need!
         </p>
-        <Button
-          txt='Buy Now'
-          styles='bg-blue-600 rounded-md px-8 py-3 font-medium text-white hover:bg-blue-500'
-          sectionId='categorias'
-          fn={scrollToSection}
-        />
+        <button
+          onClick={() => {
+            scrollToSection('categorias')
+          }}
+          className='bg-blue-600 rounded-md px-8 py-3 font-medium text-white hover:bg-blue-500'
+        >
+          Buy Now
+        </button>
       </div>
     </section>
   )

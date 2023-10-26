@@ -3,14 +3,13 @@ import { BASE_URL, STATUS } from '@/utils'
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 interface CategotiesState {
-  searchProduct: Product[]
+  searchProducts: Product[]
   searchProductStatus: string
   error: string | undefined
 }
 
 const initialState: CategotiesState = {
-  searchProduct: [],
-  // searchProduct: {} as Product,
+  searchProducts: [],
   searchProductStatus: STATUS.IDLE,
   error: undefined
 }
@@ -27,7 +26,7 @@ const SearchSlice = createSlice({
       .addCase(
         fetchSearchProduct.fulfilled,
         (state, action: PayloadAction<Product[]>) => {
-          state.searchProduct = action.payload
+          state.searchProducts = action.payload
           state.searchProductStatus = STATUS.SUCCEEDED
         }
       )
@@ -39,7 +38,7 @@ const SearchSlice = createSlice({
 })
 
 export const fetchSearchProduct = createAsyncThunk(
-  'searchProduct/fetch',
+  'searchProducts/fetch',
   async ({ search }: { search: string }) => {
     const response = await fetch(`${BASE_URL}products/search?q=${search}`)
     const data = await response.json()

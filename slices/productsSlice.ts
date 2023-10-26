@@ -4,22 +4,16 @@ import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit'
 
 interface ProductsState {
   products: Product[]
+  singleProduct: Product
   productsStatus: string
   errorProducts: string | undefined
-
-  singleProduct: Product
-  singleProductStatus: string
-  errorSingleProduct: string | undefined
 }
 
 const initialState: ProductsState = {
   products: [],
   productsStatus: STATUS.IDLE,
   errorProducts: undefined,
-
-  singleProduct: {} as Product,
-  singleProductStatus: STATUS.IDLE,
-  errorSingleProduct: undefined
+  singleProduct: {} as Product
 }
 
 const productsSlice = createSlice({
@@ -45,18 +39,18 @@ const productsSlice = createSlice({
       })
       //   -----------------Fetch Single Product----------------------
       .addCase(fetchSingleProduct.pending, (state) => {
-        state.singleProductStatus = STATUS.LOADING
+        state.productsStatus = STATUS.LOADING
       })
       .addCase(
         fetchSingleProduct.fulfilled,
         (state, action: PayloadAction<Product>) => {
-          state.singleProductStatus = STATUS.SUCCEEDED
+          state.productsStatus = STATUS.SUCCEEDED
           state.singleProduct = action.payload
         }
       )
       .addCase(fetchSingleProduct.rejected, (state, action) => {
-        state.singleProductStatus = STATUS.FAILED
-        state.errorSingleProduct = action.error.message
+        state.productsStatus = STATUS.FAILED
+        state.errorProducts = action.error.message
       })
   }
 })

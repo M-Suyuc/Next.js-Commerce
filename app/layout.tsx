@@ -5,6 +5,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import './globals.css'
 import { Suspense } from 'react'
+import { FilterProvider } from '@/context/filters'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -24,7 +25,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          <Suspense>{children}</Suspense>
+          <FilterProvider>
+            <Suspense>{children}</Suspense>
+          </FilterProvider>
           <Footer />
         </Providers>
       </body>

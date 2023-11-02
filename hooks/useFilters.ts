@@ -11,11 +11,7 @@ export function useFilters() {
 
   const filtersProducts = (products: ProdcustWithQ[] | Product[]) => {
     return products.filter((product) => {
-      return (
-        product.price >= filters.minPrice
-        // && (context.filters.category === 'all' ||
-        //   product.category === context.filters.category)
-      )
+      return product.price >= filters.minPrice
     })
   }
 

@@ -14,11 +14,19 @@ const Hero = () => {
   return (
     <section
       style={{ backgroundImage: `url(${imgHero.src})` }}
-      className='w-full min-h-[85vh] overflow-hidden flex items-center pb-10 lg:pb-0 relative bg-contain sm:bg-right-top section bg-left-bottom bg-no-repeat bg-blue-50 px-4'
+      className='w-full min-h-[85vh] overflow-hidden flex items-center pb-10 lg:pb-0 relative bg-contain sm:bg-right-top section bg-left-bottom bg-no-repeat bg-blue-50'
     >
-      <div className='w-[100%] max-w-xl px-8 lg:px-0 backdrop-blur-[5px] sm:backdrop-blur-none py-10'>
-        <h1 className='text-3xl md:text-4xl lg:text-4xl uppercase font-bold mb-4 text-shade-500 balance'>
-          Explore our incredible selection of products!
+      <div className='w-[100%] max-w-xl px-8 lg:px-0 backdrop-blur-[3px] sm:backdrop-blur-none py-10'>
+        <h1 className='text-4xl lg:text-5xl uppercase font-extrabold mb-4 text-shade-500 balance'>
+          Explore our{' '}
+          <span className='text-transparent bg-gradient-to-r from-green-700 to-blue-700 bg-clip-text'>
+            incredible
+          </span>{' '}
+          selection of{' '}
+          <span className='text-transparent bg-gradient-to-r from-green-700 to-blue-700 bg-clip-text'>
+            {' '}
+            products!
+          </span>
         </h1>
         <p className='mb-8 text-lg md:text-lg  md:text-zinc-700 balance '>
           In our store, you will find a wide variety of high-quality products at

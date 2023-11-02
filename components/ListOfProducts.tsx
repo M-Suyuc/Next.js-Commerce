@@ -1,45 +1,90 @@
+'use client'
 import { type Product } from '@/types/interface.d'
-import Image from 'next/image'
-import Link from 'next/link'
+import { Card } from './Card'
+import { useEffect, useState } from 'react'
+import {
+  fetchAllCategories,
+  fetchProductsByCategory
+} from '@/slices/categoriesSlice'
+import { useAppDispatch } from '@/hooks/store'
+import { Filters } from './Filters'
+import { useStateCategories } from '@/hooks/useStateCategories'
+import { useFilters } from '@/hooks/useFilters'
+import { fetchAllProducts } from '@/slices/productsSlice'
 
 interface Props {
   products: Product[]
+  category?: string
 }
 
-export function ListOfProducts({ products }: Props) {
+export function ListOfProducts({ products, category }: Props) {
+  const [maxNumer, setMaxNumer] = useState(0)
+  const [categoryy, setCategoryy] = useState(category)
+  const dispatch = useAppDispatch()
+  const { productsByCategory } = useStateCategories()
+
+  const { categories } = useStateCategories()
+  const productsRender = categoryy === '' ? products : productsByCategory
+  const { filtersProducts } = useFilters()
+
+  const filteredProducts = filtersProducts(productsRender)
+
+  const encontrarProductoMasCaro = (filteredProducts: Product[]) => {
+    let productoMasCaro = filteredProducts[0]
+    for (let i = 1; i < filteredProducts.length; i++) {
+      if (filteredProducts[i].price > productoMasCaro.price) {
+        productoMasCaro = filteredProducts[i]
+      }
+    }
+    setMaxNumer(productoMasCaro?.price)
+  }
+
+  useEffect(() => {
+    encontrarProductoMasCaro(productsRender)
+  }, [productsRender])
+
+  useEffect(() => {
+    if (!categoryy) return
+    dispatch(fetchProductsByCategory({ category: categoryy }))
+  }, [categoryy, dispatch])
+
+  useEffect(() => {
+    dispatch(fetchAllProducts())
+    dispatch(fetchAllCategories())
+  }, [dispatch])
+
   return (
     <section className='min-h-screen pb-10'>
-      <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6'>
-        {products.map(({ id, images, title, price, description, rating }) => (
-          <article
-            className='border border-solid border-zinc-300 shadow flex flex-col justify-between overflow-hidden relative'
-            key={id}
-          >
-            <Link href={`/product/${id}`}>
-              <div className='w-full aspect-video overflow-hidden'>
-                <Image
-                  src={images[0]}
-                  alt={title}
-                  className='w-full h-full object-contain'
-                  width={200}
-                  height={200}
-                />
-              </div>
-              <section className='w-full p-3 text-center bg-blue-500/10'>
-                <h4 className='font-medium text-blue-600 w-full overflow-hidden h-6'>
-                  {title}
-                </h4>
-                <p className='text-zinc-500 line-clamp-2 text-sm'>
-                  {description}
-                </p>
-                <div className='flex justify-between items-center pt-2'>
-                  <span className='font-light text-xs'>rating: {rating} </span>
-                  <span className='font-semibold'>$ {price}.00 </span>
-                </div>
-              </section>
-            </Link>
-          </article>
-        ))}
+      <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize w-full'>
+        {categoryy ? categoryy.replace('-', ' ') : 'Products'}
+      </div>
+      <Filters maxNumer={maxNumer} />
+      <div className='flex gap-2'>
+        <aside className='hidden md:block h-screen lg:h-[70vh] bg-white min-w-[180px] overflow-y-auto overflow-x-hidden border border-slate-300'>
+          <h4 className='text-lg lg:text-2xl font-bold  border-b border-solid py-3 text-left px-2'>
+            Categories
+          </h4>
+          {categories.map((categoryy, index) => (
+            <ul key={index}>
+              <li className='cursor-pointer border-b border-solid hover:translate-x-2 transition ease-out '>
+                <button
+                  onClick={() => {
+                    setCategoryy(categories[index])
+                  }}
+                  className='py-2  capitalize w-full h-full inline-block text-left px-2'
+                >
+                  {categoryy.replace('-', ' ')}
+                </button>
+              </li>
+            </ul>
+          ))}
+        </aside>
+        {/* ----------------- */}
+        <div className='grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3'>
+          {filteredProducts.map((product) => (
+            <Card product={product} key={product.id} />
+          ))}
+        </div>
       </div>
     </section>
   )

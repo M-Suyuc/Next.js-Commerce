@@ -26,9 +26,7 @@ const CategoryPage: React.FC<ProductPageProps> = ({ params: { category } }) => {
       {categoriesStatus === STATUS.LOADING && (
         <div className='text-center text-3xl font-bold'>Loading...</div>
       )}
-      {productsByCategory && (
-        <ListOfProducts products={productsByCategory} category={category} />
-      )}
+      {productsByCategory && <ListOfProducts products={productsByCategory} />}
     </div>
   )
 }

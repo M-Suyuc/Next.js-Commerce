@@ -57,8 +57,10 @@ const productsSlice = createSlice({
 
 export const fetchAllProducts = createAsyncThunk(
   'products/fetchProducts',
-  async () => {
-    const response = await fetch(`${BASE_URL}products?limit=25`)
+  async ({ page }: { page: number }) => {
+    const response = await fetch(
+      `${BASE_URL}products?limit=15&skip=${15 * page}`
+    )
     const data = (await response.json()) as TypesData
     return data.products
   }

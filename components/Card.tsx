@@ -11,7 +11,7 @@ export const Card = ({ product }: Props) => {
 
   return (
     <article
-      className='border border-solid border-zinc-200 shadow-sm flex flex-col justify-between overflow-hidden relative'
+      className='border border-solid border-zinc-200 shadow-sm flex flex-col justify-between overflow-hidden relative max-h-64'
       key={id}
     >
       <Link href={`/product/${id}`}>

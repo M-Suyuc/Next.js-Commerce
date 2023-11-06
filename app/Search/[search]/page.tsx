@@ -30,9 +30,9 @@ const SearchProduct: React.FC<ProductPageProps> = ({ params: { search } }) => {
       )}
       {searchProducts.length > 0 ? (
         <>
-          <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize'>
+          {/* <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize'>
             {search.replace('-', ' ')}
-          </div>
+          </div> */}
           <ListOfProducts products={searchProducts} />
         </>
       ) : (

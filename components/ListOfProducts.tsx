@@ -10,22 +10,19 @@ import { useAppDispatch } from '@/hooks/store'
 import { Filters } from './Filters'
 import { useStateCategories } from '@/hooks/useStateCategories'
 import { useFilters } from '@/hooks/useFilters'
-import { fetchAllProducts } from '@/slices/productsSlice'
 
 interface Props {
   products: Product[]
-  category?: string
 }
 
-export function ListOfProducts({ products, category }: Props) {
+export function ListOfProducts({ products }: Props) {
   const [maxNumer, setMaxNumer] = useState(0)
-  const [categoryy, setCategoryy] = useState(category)
+  const [categoryy, setCategoryy] = useState('')
   const dispatch = useAppDispatch()
-  const { productsByCategory } = useStateCategories()
-
-  const { categories } = useStateCategories()
-  const productsRender = categoryy === '' ? products : productsByCategory
   const { filtersProducts } = useFilters()
+  const { productsByCategory, categories } = useStateCategories()
+
+  const productsRender = categoryy === '' ? products : productsByCategory
 
   const filteredProducts = filtersProducts(productsRender)
 
@@ -49,14 +46,13 @@ export function ListOfProducts({ products, category }: Props) {
   }, [categoryy, dispatch])
 
   useEffect(() => {
-    dispatch(fetchAllProducts())
     dispatch(fetchAllCategories())
   }, [dispatch])
 
   return (
     <section className='min-h-screen pb-10'>
       <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize w-full'>
-        {categoryy ? categoryy.replace('-', ' ') : 'Products'}
+        {categoryy ? categoryy.replace('-', ' ') : 'All products'}
       </div>
       <Filters maxNumer={maxNumer} />
       <div className='flex gap-2'>

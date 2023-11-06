@@ -27,7 +27,7 @@ export function Filters({ maxNumer }: Filter) {
 
   return (
     <>
-      <section className='bg-zinc-50 p-4 mb-6'>
+      <section className='p-4'>
         <div className='w-full  flex flex-col justify-end sm:flex-row gap-4 md:gap-8'>
           <div className='bg-zinc-100 p-2'>
             <label

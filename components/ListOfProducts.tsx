@@ -1,5 +1,5 @@
 'use client'
-import { type Product } from '@/types/interface.d'
+import { Category, type Product } from '@/types/interface.d'
 import { Card } from './Card'
 import { useEffect, useState } from 'react'
 import {
@@ -17,12 +17,12 @@ interface Props {
 
 export function ListOfProducts({ products }: Props) {
   const [maxNumer, setMaxNumer] = useState(0)
-  const [categoryy, setCategoryy] = useState('')
+  const [categoryy, setCategoryy] = useState<Category>()
   const dispatch = useAppDispatch()
   const { filtersProducts } = useFilters()
   const { productsByCategory, categories } = useStateCategories()
 
-  const productsRender = categoryy === '' ? products : productsByCategory
+  const productsRender = categoryy ===  undefined ? products : productsByCategory
 
   const filteredProducts = filtersProducts(productsRender)
 

@@ -28,7 +28,7 @@ export function SearchForm() {
         className='relative w-full overflow-hidden border border-gray-300 rounded-lg'
       >
         <input
-          placeholder='laptop, phone, bag, watch...'
+          placeholder='phone, bag, watch...'
           className='inline-block outline-none pl-2 pr-24 lg:pr-72 py-[.40rem] w-full'
           onChange={handleChange}
           value={search}

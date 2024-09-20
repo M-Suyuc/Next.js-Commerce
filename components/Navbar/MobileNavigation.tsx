@@ -37,10 +37,10 @@ export function MobileNavigation() {
             <ul key={index} className=''>
               <li className='cursor-pointer border-b border-solid hover:translate-x-2 transition ease-out pl-4'>
                 <Link
-                  href={`/category/${category}`}
+                  href={`/category/${category.name}`}
                   className='py-2 pr-12 capitalize w-full h-full inline-block text-black'
                 >
-                  {category.replace('-', ' ')}
+                  {category.name.replace('-', ' ')}
                 </Link>
               </li>
             </ul>

@@ -42,7 +42,7 @@ export function ListOfProducts({ products }: Props) {
 
   useEffect(() => {
     if (!categoryy) return
-    dispatch(fetchProductsByCategory({ category: categoryy }))
+    dispatch(fetchProductsByCategory({ category: categoryy.slug }))
   }, [categoryy, dispatch])
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export function ListOfProducts({ products }: Props) {
   return (
     <section className='min-h-screen pb-10'>
       <div className='shadow-md bg-white mb-6 py-2 px-8 text-zinc-500 text-lg font-semibold border-l-[10px] border-shade-500 capitalize w-full'>
-        {categoryy ? categoryy.replace('-', ' ') : 'All products'}
+        {categoryy ? categoryy.name.replace('-', ' ') : 'All products'}
       </div>
       <Filters maxNumer={maxNumer} />
       <div className='flex gap-2'>
@@ -69,7 +69,7 @@ export function ListOfProducts({ products }: Props) {
                   }}
                   className='py-2  capitalize w-full h-full inline-block text-left px-2'
                 >
-                  {categoryy.replace('-', ' ')}
+                  {categoryy.name.replace('-', ' ')}
                 </button>
               </li>
             </ul>

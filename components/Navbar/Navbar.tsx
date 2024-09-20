@@ -50,17 +50,18 @@ const Navbar = () => {
 
       <div className='hidden gap-7 py-3 lg:flex justify-between px-4 bg-blue-600 rounded-t-md w-full overflow-x-hidden'>
         {categories.slice(0, 9).map((category, index) => (
-          <ul key={index} className='flex flex-row'>
-            <li className='cursor-pointer'>
-              <Link
-                href={`/category/${category}`}
-                className='font-light capitalize text-shade-500 text-white'
-              >
-                {category.replace('-', ' ')}
-              </Link>
-            </li>
-          </ul>
-        ))}
+            <ul key={index} className='flex flex-row'>
+              <li className='cursor-pointer'>
+                <Link
+                  href={`/category/${category.slug}`}
+                  className='font-light capitalize text-shade-500 text-white'
+                >
+                  {category.name.replace('-', ' ')}
+                </Link>
+              </li>
+            </ul>
+          )
+        )}
       </div>
 
       <div className='lg:hidden'>

@@ -37,6 +37,16 @@ export interface Category {
 }
 
 
+export interface ProdcustWithQ extends Product {
+  quantity: number
+  totalPrice: number
+}
+
+export interface ToggleCartQtyAction {
+  id: number
+  option: string
+}
+
 export interface Dimensions {
   width:  number;
   height: number;

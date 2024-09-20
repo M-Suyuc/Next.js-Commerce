@@ -5,6 +5,7 @@ import { addCart } from '@/slices/cartSlice'
 import { fetchSingleProduct } from '@/slices/productsSlice'
 import { Product } from '@/types/interface.d'
 import { STATUS } from '@/utils'
+import Image from 'next/image'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 
@@ -80,10 +81,13 @@ const ProductSinglePage: React.FC<ProductPageProps> = ({ params: { id } }) => {
       <div className='section min-h-[90vh] bg-slate-50 grid md:grid-cols-2 overflow-hidden justify-center items-center py-10 md:py-0 md:gap-x-8 gap-y-0'>
         <section className='w-full  overflow-hidden'>
           <div className='w-full aspect-video overflow-hidden'>
-            <img
+            <Image
               src={imageUrl}
               alt={`imagen-${title}`}
               className='w-full h-full object-contain'
+              width={200}
+              height={200}
+              priority
             />
           </div>
         </section>

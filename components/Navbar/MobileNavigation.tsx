@@ -40,7 +40,7 @@ export function MobileNavigation() {
                   href={`/category/${category.name}`}
                   className='py-2 pr-12 capitalize w-full h-full inline-block text-black'
                 >
-                  {category.name.replace('-', ' ')}
+                  {category.name}
                 </Link>
               </li>
             </ul>

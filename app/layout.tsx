@@ -25,8 +25,9 @@ export default async function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          <FilterProvider>
-            <Suspense>{children}</Suspense>
+
+          <FilterProvider >
+            {children}
           </FilterProvider>
           <Footer />
         </Providers>

@@ -22,6 +22,7 @@ export const Card = ({ product }: Props) => {
             className='w-full h-full object-contain'
             width={200}
             height={200}
+            priority
           />
         </div>
         <section className='w-full p-3 text-center bg-blue-500/10'>

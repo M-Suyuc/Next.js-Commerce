@@ -1,11 +1,11 @@
-import { Product } from '@/types/interface.d'
+import { Category, Product } from '@/types/interface.d'
 import { BASE_URL, STATUS } from '@/utils'
 import { PayloadAction, createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 
 // payload:PayloadAction<valor que devemos recibir  en el payload>
 
 interface CategotiesState {
-  categories: string[]
+  categories: Category[]
   categoriesStatus: string
 
   productsByCategory: Product[]
@@ -36,7 +36,7 @@ const categorySlice = createSlice({
       })
       .addCase(
         fetchAllCategories.fulfilled,
-        (state, action: PayloadAction<string[]>) => {
+        (state, action: PayloadAction<Category[]>) => {
           state.categoriesStatus = STATUS.SUCCEEDED
           state.categories = action.payload
         }
